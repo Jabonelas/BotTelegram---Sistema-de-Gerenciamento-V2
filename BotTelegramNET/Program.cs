@@ -37,7 +37,10 @@ botClient.StartReceiving(
 
 var me = await botClient.GetMeAsync();
 
-Console.WriteLine($"Start listening for @{me.Username}");
+Console.ForegroundColor = ConsoleColor.Cyan;
+Console.WriteLine($"---------------------------------------");
+Console.WriteLine($"    Bot @{me.Username} Inicializado");
+Console.WriteLine($"---------------------------------------\n");
 Console.ReadLine();
 
 // Send cancellation request to stop bot
@@ -87,10 +90,20 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
                 replyMarkup: inlineKeyboard,
                 cancellationToken: cancellationToken);
         }
+
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine($"\nSolicitacao: Mensagem de Texto  -  Usuario: {update.Message.From.FirstName}  -  ID:{update.Message.From.Id}");
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"Texto Digitado Usuario: {update.Message.Text}");
     }
     else if (update.Type == UpdateType.CallbackQuery)
     {
         var query = update.CallbackQuery.Data;
+
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine($"\nSolicitacao: Comando Selecionado  -  Usuario: {update.CallbackQuery.From.FirstName}  -  ID:{update.CallbackQuery.From.Id}");
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine($"Comando Solicitado Usuario: {update.CallbackQuery.Data}");
 
         //
         //Historico
@@ -129,54 +142,136 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
         {
             var chatId = update.CallbackQuery.Message.Chat.Id;
 
+            string carregando = "Carregando...";
+
             Message sentMessage1 = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"Carregando...",
+                text: carregando,
                 parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken);
 
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"Retorno Bot: {carregando}");
+
             PreencherHoje();
+
+            string retorno = $"*Histórico Total de Vendas Hoje:* {BuscarHistoricoVenda().ToString("C2")}";
 
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"*Histórico de Vendas Hoje:* {BuscarHistoricoVenda().ToString("C2")}",
+                text: retorno,
+
                 parseMode: ParseMode.Markdown,
+                cancellationToken: cancellationToken);
+
+            Console.WriteLine($"Retorno Bot: {retorno}");
+
+            InlineKeyboardMarkup inlineKeyboard = new(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Sim", callbackData: "sim"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Não", callbackData: "Cancelar"),
+                },
+            });
+
+            Message sentMessage2 = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Deseja Algo Mais?",
+                replyMarkup: inlineKeyboard,
                 cancellationToken: cancellationToken);
         }
         else if (query.Equals("HistoricoUltimos7Dias"))
         {
             var chatId = update.CallbackQuery.Message.Chat.Id;
 
+            string carregando = "Carregando...";
+
             Message sentMessage1 = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"Carregando...",
+                text: carregando,
                 parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken);
 
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"Retorno Bot: {carregando}");
+
             PreencherUltimos7Dias();
+
+            string retorno = $"*Histórico Total de Vendas dos Últimos 7 dias:* {BuscarHistoricoVenda().ToString("C2")}";
 
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"*Histórico de Vendas dos Últimos 7 dias:* {BuscarHistoricoVenda().ToString("C2")}",
+                text: retorno,
                 parseMode: ParseMode.Markdown,
+                cancellationToken: cancellationToken);
+
+            Console.WriteLine($"Retorno Bot: {retorno}");
+
+            InlineKeyboardMarkup inlineKeyboard = new(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Sim", callbackData: "sim"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Não", callbackData: "Cancelar"),
+                },
+            });
+
+            Message sentMessage2 = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Deseja Algo Mais?",
+                replyMarkup: inlineKeyboard,
                 cancellationToken: cancellationToken);
         }
         else if (query.Equals("HistoricoUltimos30Dias"))
         {
             var chatId = update.CallbackQuery.Message.Chat.Id;
 
+            string carregando = "Carregando...";
+
             Message sentMessage1 = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"Carregando...",
+                text: carregando,
                 parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken);
 
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"Retorno Bot: {carregando}");
+
             PreencherUltimos30Dias();
+
+            string retorno = $"*Histórico Total de Vendas dos Últimos 30 dias:* {BuscarHistoricoVenda().ToString("C2")}";
 
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"*Histórico de Vendas dos Últimos 30 dias:* {BuscarHistoricoVenda().ToString("C2")}",
+                text: retorno,
                 parseMode: ParseMode.Markdown,
+                cancellationToken: cancellationToken);
+
+            Console.WriteLine($"Retorno Bot: {retorno}");
+
+            InlineKeyboardMarkup inlineKeyboard = new(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Sim", callbackData: "sim"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Não", callbackData: "Cancelar"),
+                },
+            });
+
+            Message sentMessage2 = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Deseja Algo Mais?",
+                replyMarkup: inlineKeyboard,
                 cancellationToken: cancellationToken);
         }
         //
@@ -208,7 +303,7 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
 
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: "Selecione uum Período",
+                text: "Selecione um Período",
                 replyMarkup: inlineKeyboard,
                 cancellationToken: cancellationToken);
         }
@@ -216,70 +311,183 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
         {
             var chatId = update.CallbackQuery.Message.Chat.Id;
 
+            string carregando = "Carregando...";
+
             Message sentMessage1 = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"Carregando...",
+                text: carregando,
                 parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken);
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"Retorno Bot: {carregando}");
 
             PreencherHoje();
 
             BuscarProdutosMaisVendidos();
 
+            string produtoTop5 = "*Top 5 Produtos*";
+
+            Message sentMessage2 = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: produtoTop5,
+                parseMode: ParseMode.Markdown,
+                cancellationToken: cancellationToken);
+
+            Console.WriteLine($"Retorno Bot: {produtoTop5}");
+
             foreach (var item in listaProdutos)
             {
+                string retorno = $"*Faturamento de Hoje:*  Cod. Produto: {item.codigoProduto}  -  Descrição Produto {item.nomeProduto}  -  Qtd. Total: {item.quantidade.ToString("N0")} Und.  -  Valor Total: {item.valor.ToString("C2")}";
+
                 Message sentMessage = await botClient.SendTextMessageAsync(
                     chatId: chatId,
-                    text: $"*Faturamento de Hoje:*  Cod. Produto: {item.codigoProduto}  -  Descrição Produto {item.nomeProduto}  -  Qtd. Total: {item.quantidade.ToString("N0")} Und.  -  Valor Total: {item.valor.ToString("C2")}",
+                    text: retorno,
                     parseMode: ParseMode.Markdown,
                     cancellationToken: cancellationToken);
+
+                Console.WriteLine($"Retorno Bot: {retorno}");
             }
+
+            InlineKeyboardMarkup inlineKeyboard = new(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Sim", callbackData: "sim"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Não", callbackData: "Cancelar"),
+                },
+            });
+
+            Message sentMessage3 = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Deseja Algo Mais?",
+                replyMarkup: inlineKeyboard,
+                cancellationToken: cancellationToken);
         }
         else if (query.Equals("FaturamentoUltimos7Dias"))
         {
             var chatId = update.CallbackQuery.Message.Chat.Id;
 
+            string carregando = "Carregando...";
+
             Message sentMessage1 = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"Carregando...",
+                text: carregando,
                 parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken);
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"Retorno Bot: {carregando}");
 
             PreencherUltimos7Dias();
 
             BuscarProdutosMaisVendidos();
 
+            string produtoTop5 = "*Top 5 Produtos*";
+
+            Message sentMessage2 = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: produtoTop5,
+                parseMode: ParseMode.Markdown,
+                cancellationToken: cancellationToken);
+
+            Console.WriteLine($"Retorno Bot: {produtoTop5}");
+
             foreach (var item in listaProdutos)
             {
+                string retorno =
+                    $"*Faturamento dos Últimos 7 Dias:*  Cod. Produto: {item.codigoProduto}  -  Descrição Produto {item.nomeProduto}  -  Qtd. Total: {item.quantidade.ToString("N0")} Und.  -  Valor Total: {item.valor.ToString("C2")}";
+
                 Message sentMessage = await botClient.SendTextMessageAsync(
                     chatId: chatId,
-                    text: $"*Faturamento dos Últimos 7 Dias:*  Cod. Produto: {item.codigoProduto}  -  Descrição Produto {item.nomeProduto}  -  Qtd. Total: {item.quantidade.ToString("N0")} Und.  -  Valor Total: {item.valor.ToString("C2")}",
+                    text: retorno,
                     parseMode: ParseMode.Markdown,
                     cancellationToken: cancellationToken);
+
+                Console.WriteLine($"Retorno Bot: {retorno}");
             }
+
+            InlineKeyboardMarkup inlineKeyboard = new(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Sim", callbackData: "sim"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Não", callbackData: "Cancelar"),
+                },
+            });
+
+            Message sentMessage3 = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Deseja Algo Mais?",
+                replyMarkup: inlineKeyboard,
+                cancellationToken: cancellationToken);
         }
         else if (query.Equals("FaturamentoUltimos30Dias"))
         {
             var chatId = update.CallbackQuery.Message.Chat.Id;
 
+            string carregando = "Carregando...";
+
             Message sentMessage1 = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"Carregando...",
+                text: carregando,
                 parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken);
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"Retorno Bot: {carregando}");
 
             PreencherUltimos30Dias();
 
             BuscarProdutosMaisVendidos();
 
+            string produtoTop5 = "*Top 5 Produtos*";
+
+            Message sentMessage2 = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: produtoTop5,
+                parseMode: ParseMode.Markdown,
+                cancellationToken: cancellationToken);
+
+            Console.WriteLine($"Retorno Bot: {produtoTop5}");
+
             foreach (var item in listaProdutos)
             {
+                string retorno =
+                    $"*Faturamento dos Últimos 30 Dias:*  Cod. Produto: {item.codigoProduto}  -  Descrição Produto {item.nomeProduto}  -  Qtd. Total: {item.quantidade.ToString("N0")} Und.  -  Valor Total: {item.valor.ToString("C2")}";
+
                 Message sentMessage = await botClient.SendTextMessageAsync(
                     chatId: chatId,
-                    text: $"*Faturamento dos Últimos 30 Dias:*  Cod. Produto: {item.codigoProduto}  -  Descrição Produto {item.nomeProduto}  -  Qtd. Total: {item.quantidade.ToString("N0")} Und.  -  Valor Total: {item.valor.ToString("C2")}",
+                    text: retorno,
                     parseMode: ParseMode.Markdown,
                     cancellationToken: cancellationToken);
+
+                Console.WriteLine($"Retorno Bot: {retorno}");
             }
+
+            InlineKeyboardMarkup inlineKeyboard = new(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Sim", callbackData: "sim"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Não", callbackData: "Cancelar"),
+                },
+            });
+
+            Message sentMessage3 = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Deseja Algo Mais?",
+                replyMarkup: inlineKeyboard,
+                cancellationToken: cancellationToken);
         }
         //
         //Vendas
@@ -318,11 +526,16 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
         {
             var chatId = update.CallbackQuery.Message.Chat.Id;
 
+            string carregando = "Carregando...";
+
             Message sentMessage1 = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"Carregando...",
+                text: carregando,
                 parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken);
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"Retorno Bot: {carregando}");
 
             PreencherHoje();
 
@@ -332,22 +545,50 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
 
             foreach (var item in listaDadosVendedores)
             {
+                string retorno =
+                    $"*Total de Vendas dos Últimos Hoje:*  Vendedor: {item.vendedor}  -  Qtd Total de Produtos Vendidos: {item.quantidadeTotal.ToString("N")} Und.  -  Valor Total de Produtos Vendidos: {item.valorTotal.ToString("C2")}";
+
                 Message sentMessage = await botClient.SendTextMessageAsync(
                     chatId: chatId,
-                    text: $"*Vendas Hoje:*  Vendedor: {item.vendedor}  -  Qtd Total de Produtos Vendidos: {item.quantidadeTotal.ToString("N")} Und.  -  Valor Total de Produtos Vendidos: {item.valorTotal.ToString("C2")}",
+                    text: retorno,
                     parseMode: ParseMode.Markdown,
                     cancellationToken: cancellationToken);
+
+                Console.WriteLine($"Retorno Bot: {retorno}");
             }
+
+            InlineKeyboardMarkup inlineKeyboard = new(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Sim", callbackData: "sim"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Não", callbackData: "Cancelar"),
+                },
+            });
+
+            Message sentMessage2 = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Deseja Algo Mais?",
+                replyMarkup: inlineKeyboard,
+                cancellationToken: cancellationToken);
         }
         else if (query.Equals("VendasUltimos7Dias"))
         {
             var chatId = update.CallbackQuery.Message.Chat.Id;
 
+            string carregando = "Carregando...";
+
             Message sentMessage1 = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"Carregando...",
+                text: carregando,
                 parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken);
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"Retorno Bot: {carregando}");
 
             PreencherUltimos7Dias();
 
@@ -357,22 +598,50 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
 
             foreach (var item in listaDadosVendedores)
             {
+                string retorno =
+                    $"*Total de Vendas dos Últimos 7 Dias:*  Vendedor: {item.vendedor}  -  Qtd Total de Produtos Vendidos: {item.quantidadeTotal.ToString("N")} Und.  -  Valor Total de Produtos Vendidos: {item.valorTotal.ToString("C2")}";
+
                 Message sentMessage = await botClient.SendTextMessageAsync(
                     chatId: chatId,
-                    text: $"*Vendas 7 Dias:*  Vendedor: {item.vendedor}  -  Qtd Total de Produtos Vendidos: {item.quantidadeTotal.ToString("N")} Und.  -  Valor Total de Produtos Vendidos: {item.valorTotal.ToString("C2")}",
+                    text: retorno,
                     parseMode: ParseMode.Markdown,
                     cancellationToken: cancellationToken);
+
+                Console.WriteLine($"Retorno Bot: {retorno}");
             }
+
+            InlineKeyboardMarkup inlineKeyboard = new(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Sim", callbackData: "sim"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Não", callbackData: "Cancelar"),
+                },
+            });
+
+            Message sentMessage2 = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Deseja Algo Mais?",
+                replyMarkup: inlineKeyboard,
+                cancellationToken: cancellationToken);
         }
         else if (query.Equals("VendasUltimos30Dias"))
         {
             var chatId = update.CallbackQuery.Message.Chat.Id;
 
+            string carregando = "Carregando...";
+
             Message sentMessage1 = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"Carregando...",
+                text: carregando,
                 parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken);
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"Retorno Bot: {carregando}");
 
             PreencherUltimos30Dias();
 
@@ -382,12 +651,35 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
 
             foreach (var item in listaDadosVendedores)
             {
+                string retorno =
+                    $"*Total de Vendas dos Últimos 30 Dias:*  Vendedor: {item.vendedor}  -  Qtd Total de Produtos Vendidos: {item.quantidadeTotal.ToString("N")} Und.  -  Valor Total de Produtos Vendidos: {item.valorTotal.ToString("C2")}";
+
                 Message sentMessage = await botClient.SendTextMessageAsync(
                     chatId: chatId,
-                    text: $"*Vendas 30 Dias:*  Vendedor: {item.vendedor}  -  Qtd Total de Produtos Vendidos: {item.quantidadeTotal.ToString("N")} Und.  -  Valor Total de Produtos Vendidos: {item.valorTotal.ToString("C2")}",
+                    text: retorno,
                     parseMode: ParseMode.Markdown,
                     cancellationToken: cancellationToken);
+
+                Console.WriteLine($"Retorno Bot: {retorno}");
             }
+
+            InlineKeyboardMarkup inlineKeyboard = new(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Sim", callbackData: "sim"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Não", callbackData: "Cancelar"),
+                },
+            });
+
+            Message sentMessage2 = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Deseja Algo Mais?",
+                replyMarkup: inlineKeyboard,
+                cancellationToken: cancellationToken);
         }
         //
         //Cancelar
@@ -396,9 +688,42 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
         {
             var chatId = update.CallbackQuery.Message.Chat.Id;
 
+            string retorno = "Agradecemos o Contato!";
+
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"Agradecemos o Contato!",
+                text: retorno,
+                cancellationToken: cancellationToken);
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"Retorno Bot: {retorno}");
+        }
+        //
+        //Sim
+        //
+        else if (query.Equals("sim"))
+        {
+            var chatId = update.CallbackQuery.Message.Chat.Id;
+
+            InlineKeyboardMarkup inlineKeyboard = new(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Histórico de Vendas", callbackData: "Historico"),
+                    InlineKeyboardButton.WithCallbackData(text: "Faturamento - Top 5 Produtos", callbackData: "Faturamento"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Vendas por Vendedor", callbackData: "Vendas"),
+                    InlineKeyboardButton.WithCallbackData(text: "Cancelar", callbackData: "Cancelar"),
+                },
+            });
+
+            Message sentMessage = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Selecione uma das Opções:",
+                parseMode: ParseMode.Markdown,
+                replyMarkup: inlineKeyboard,
                 cancellationToken: cancellationToken);
         }
     }
