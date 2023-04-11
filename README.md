@@ -12,7 +12,8 @@ Exibição dos resultados das buscas selecionadas pelo usuário.
 
 
 **Console com exibição do histórico do Bot:**
-![enter image description here](https://i.imgur.com/qQRGGVN.png)
+
+![enter image description here](https://i.imgur.com/Vl3geZl.png)
 
 Exibição do histórico de consultas no bot com as mensagens de solicitação, comandos, retornos , usuário e ID do usuário que acessou.
 
